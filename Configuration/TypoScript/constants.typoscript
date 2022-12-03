@@ -1,0 +1,8 @@
+
+plugin.tx_sendmessage_mail {
+    view {
+       templateRootPath = EXT:sendmessage/Resources/Private/Templates/
+       partialRootPath = EXT:sendmessage/Resources/Private/Partials/
+       layoutRootPath = EXT:sendmessage/Resources/Private/Layouts/
+    }
+}

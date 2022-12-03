@@ -1,0 +1,21 @@
+plugin.tx_sendmessage {
+	view {
+		templateRootPaths {
+			0 = EXT:send_message/Resources/Private/Templates/
+			1 = {$plugin.tx_sendmessage.view.templateRootPath}
+		}
+
+		partialRootPaths {
+			0 = EXT:send_message/Resources/Private/Partials/
+			1 = {$plugin.tx_sendmessage.view.partialRootPath}
+		}
+
+		layoutRootPaths {
+			0 = EXT:send_message/Resources/Private/Layouts/
+			1 = {$plugin.tx_sendmessage.view.layoutRootPath}
+		}
+
+	}
+}
+
+lib.parseFunc.allowTags := addToList(s)
