@@ -9,6 +9,12 @@
 			<trans-unit id="message.email.receivers">
 				<source>Receiver</source>
 			</trans-unit>
+			<trans-unit id="message.form.sender">
+				<source>Sender</source>
+			</trans-unit>
+			<trans-unit id="message.form.sendSenderAddress">
+				<source>Send the own email address (Reply to)</source>
+			</trans-unit>
 
 			<trans-unit id="message.form.copyToSender">
 				<source>Send a message copy to me</source>
@@ -76,6 +82,11 @@
 			<trans-unit id="message.sendSuccessful.receiverGroups">
 				<source>Receiver groups</source>
 			</trans-unit>
+
+			<trans-unit id="message.sender.noReply">
+				<source>No reply</source>
+			</trans-unit>
+
 
 		</body>
 	</file>

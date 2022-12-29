@@ -42,6 +42,10 @@
 				<source>Sender name</source>
 				<target state="tanslated">Sendername</target>
 			</trans-unit>
+			<trans-unit id="flexforms_general.settings.noReplySenderEmail">
+				<source>Email address for "no reply"</source>
+				<target state="tanslated">Nicht-Antworten-E-Mail-Adresse</target>
+			</trans-unit>
 			<trans-unit id="flexforms_general.settings.subjectPrefix">
 				<source>Subject prefix</source>
 				<target state="tanslated">Betreff-Prefix</target>

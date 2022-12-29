@@ -33,6 +33,9 @@
 			<trans-unit id="flexforms_general.settings.senderName">
 				<source>Sender name</source>
 			</trans-unit>
+			<trans-unit id="flexforms_general.settings.noReplySenderEmail">
+				<source>Email address for "no reply"</source>
+			</trans-unit>
 			<trans-unit id="flexforms_general.settings.subjectPrefix">
 				<source>Subject prefix</source>
 			</trans-unit>

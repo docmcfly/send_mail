@@ -14,6 +14,7 @@ use Cylancer\SendMessage\Service\FrontendUserService;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Session\UserSession;
 use TYPO3\CMS\Core\Session\UserSessionManager;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 // V11.5
 // use TYPO3\CMS\Core\Session\UserSessionManager;
@@ -108,6 +109,7 @@ class MessageFormController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
             $msg = $this->request->getArgument(MessageFormController::MESSAGE_KEY);
         } else {
             $msg = new Message();
+            $msg->setSender($this->frontendUserService->getCurrentUser());
             $msg->setKey($this->createSessionMessageKey());
         }
         $validationResults = $this->request->hasArgument(MessageFormController::VALIDATION_RESULTS_KEY) ? $this->request->getArgument(MessageFormController::VALIDATION_RESULTS_KEY) : new ValidationResults();
@@ -125,7 +127,8 @@ class MessageFormController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
         }, $this->getAllowedReceiverGroups()));
 
         asort($receivers);
-
+        
+        
         $this->view->assign('message', $msg);
         $this->view->assign('receivers', implode(',', $receivers));
         $this->view->assign('validationResults', $validationResults);
@@ -223,7 +226,7 @@ class MessageFormController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
             }
 
             $sender = [
-                \TYPO3\CMS\Core\Utility\MailUtility::getSystemFromAddress() => empty(trim($this->settings['senderName'])) ? 'send service' : trim($this->settings['senderName'])
+                \TYPO3\CMS\Core\Utility\MailUtility::getSystemFromAddress() => $message->getSender()->getName()
             ];
 
             if ($message->getCopyToSender()) {
@@ -248,8 +251,15 @@ class MessageFormController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
             $subject = html_entity_decode($this->settings['subjectPrefix']) . $message->getSubject();
 
             $replyTo = [];
-            if (! empty($currentFrontendUser->getEmail())) {
-                $replyTo[$currentFrontendUser->getEmail()] = $currentFrontendUser->getName();
+            if($message->getSendSenderAddress()) {
+                if (! empty($currentFrontendUser->getEmail())) {
+                    $replyTo[$currentFrontendUser->getEmail()] = $currentFrontendUser->getName();
+                }
+            } else {
+                if (! empty($this->settings['noReplySenderEmail'])) {
+                    $replyTo[$this->settings['noReplySenderEmail']] = LocalizationUtility::translate('message.sender.noReply', 'SendMessage');
+                }
+                
             }
 
             $successful = count($receivers) > 0;

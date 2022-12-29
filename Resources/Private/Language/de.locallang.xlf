@@ -11,6 +11,14 @@
 				<source>Receiver</source>
 				<target state="tanslated">Empfänger</target>
 			</trans-unit>
+			<trans-unit id="message.form.sender">
+				<source>Sender</source>
+				<target state="tanslated">Sender</target>
+			</trans-unit>
+			<trans-unit id="message.form.sendSenderAddress">
+				<source>Send the own email address (Reply to)</source>
+				<target state="tanslated">Senden der eigenen E-Mail-Adresse (Antworten an)</target>
+			</trans-unit>
 
 			<trans-unit id="message.form.copyToSender">
 				<source>Send a message copy to me</source>
@@ -96,7 +104,10 @@
 				<target state="tanslated">Empfängergruppen</target>
 			</trans-unit>
 
-
+			<trans-unit id="message.sender.noReply">
+				<source>No reply</source>
+				<target state="tanslated">Nicht antworten</target>
+			</trans-unit>
 
 
 		</body>
