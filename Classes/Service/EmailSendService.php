@@ -83,13 +83,10 @@ class EmailSendService implements SingletonInterface
             $message->addBcc($r);
         }
 
-        if (empty($replyTo)) {
-            $message->setFrom($sender);
-        } else {
+        $message->setFrom($sender);
+        if (!empty($replyTo)) {
             $replyAddress = array_key_first($replyTo);
-            $tmp = [];
-            $tmp[array_key_first($sender)] = $replyTo[$replyAddress];
-            $message->setFrom($tmp)->setReplyTo($replyAddress, $replyTo[$replyAddress]);
+            $message->setReplyTo($replyAddress, $replyTo[$replyAddress]);
         }
 
         foreach ($attachments as $attachment) {

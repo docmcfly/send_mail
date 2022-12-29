@@ -13,6 +13,7 @@
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Send a message',
     'description' => 'Nachrichten an FE-User und FE-Gruppen senden.
+## 1.1.0 :: add a new option for the sender: send the own email adddress to the receiver(s)
 ## 1.0.1 :: add garbage collection registration',
     'category' => 'plugin',
     'author' => 'C. Gogolin',
@@ -21,7 +22,7 @@ $EM_CONF[$_EXTKEY] = [
     'uploadfolder' => 0,
     'createDirs' => '',
     'clearCacheOnLoad' => 1,
-    'version' => '1.0.1',
+    'version' => '1.1.0',
     'constraints' => [
         'depends' => [
             'typo3' => '11.5.12-11.5.99',

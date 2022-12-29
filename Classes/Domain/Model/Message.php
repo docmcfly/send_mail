@@ -24,6 +24,12 @@ class Message extends AbstractEntity
      *
      * @var Boolean
      */
+    protected $sendSenderAddress = true;
+
+    /**
+     *
+     * @var Boolean
+     */
     protected $copyToSender = true;
 
     /**
@@ -67,6 +73,25 @@ class Message extends AbstractEntity
      * @var String
      */
     protected $key = null;
+
+    /**
+     *
+     * @return boolean
+     */
+    public function getSendSenderAddress(): bool
+    {
+        return $this->sendSenderAddress;
+    }
+
+    /**
+     *
+     * @param boolean $sendSenderAddress
+     * @return void
+     */
+    public function setSendSenderAddress(bool $sendSenderAddress): void
+    {
+        $this->sendSenderAddress = $sendSenderAddress;
+    }
 
     /**
      *
@@ -199,7 +224,7 @@ class Message extends AbstractEntity
         $this->attachmentsMetaData = $attachmentsMetaData;
     }
 
-    /** 
+    /**
      *
      * @return string
      */

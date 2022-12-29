@@ -33,11 +33,17 @@
 		<f:render partial="validationResults" arguments="{prefix:'message.form', validationResults: validationResults}" />
 		<f:form action="send" name="message" method="post" object="{message}" enctype="multipart/form-data">
 			<f:form.hidden property="key" />
+			<label id="senderLabel" class="sendMessageForm" for="sender"><f:translate key="message.form.sender" /></label>
+			<div id="sender">{message.sender.name}</div>
+			<div>
+				<f:form.checkbox id="sendSenderAddress" class="form-check-inline" property="sendSenderAddress" value="sendSenderAddress" />
+				<label id="sendSenderAddressLabel" class="form-check-label" for="sendSenderAddress"><f:translate key="message.form.sendSenderAddress" /></label>
+			</div>
 			<label id="receiversLabel" class="sendMessageForm" for="receipts"><f:translate key="message.form.receiver" /></label>
 			<f:form.textfield id="receivers" class="form-control" property="receivers" />
 			<div>
-			<f:form.checkbox id="copyToSender" class="form-check-inline" property="copyToSender" value="copyToSender" />
-			<label id="copyToSenderLabel" class="form-check-label" for="copyToSender"><f:translate key="message.form.copyToSender" /></label>
+				<f:form.checkbox id="copyToSender" class="form-check-inline" property="copyToSender" value="copyToSender" />
+				<label id="copyToSenderLabel" class="form-check-label" for="copyToSender"><f:translate key="message.form.copyToSender" /></label>
 			</div>
 			<label id="subjectLabel" class="sendMessageForm" for="text"><f:translate key="message.form.subject" /></label>
 			<f:form.textfield id="subject" class="form-control" property="subject" />
