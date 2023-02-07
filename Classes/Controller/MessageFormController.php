@@ -42,6 +42,8 @@ class MessageFormController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
 
     const GROUP_MARKER = '#';
 
+    const EXCLUDE_MARKER = '-';
+
     const VALIDATION_RESULTS_KEY = 'validationResults';
 
     const MESSAGE_KEY = 'message';
@@ -121,13 +123,16 @@ class MessageFormController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
         array_map(function ($frontendUser) {
             return "'" . $frontendUser->getName() . "'";
         }, $this->getAllowedReceivers()), //
-
+        array_map(function ($frontendUser) {
+            return "'" . MessageFormController::EXCLUDE_MARKER . $frontendUser->getName() . "'";
+        }, $this->getAllowedReceivers()), //
         array_map(function ($frontendUserGroup) {
             return ! empty($frontendUserGroup->getReceiverGroupName()) ? ("'" . MessageFormController::GROUP_MARKER . $frontendUserGroup->getReceiverGroupName() . "'") : '';
         }, $this->getAllowedReceiverGroups()));
 
         asort($receivers);
         
+        debug($receivers);
         
         $this->view->assign('message', $msg);
         $this->view->assign('receivers', implode(',', $receivers));
@@ -155,6 +160,8 @@ class MessageFormController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
 
         $wrongReceiverGroups = [];
         $wrongReceivers = [];
+
+        // collect all receivers
         /** @var array $tmp  */
         foreach ($receiversSource as $receiver) {
             $receiver = trim($receiver);
@@ -165,7 +172,7 @@ class MessageFormController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
                 } else {
                     $wrongReceiverGroups[] = substr($receiver, 1);
                 }
-            } else {
+            } else  if (substr($receiver, 0, 1) !== MessageFormController::EXCLUDE_MARKER) {
                 $tmp = $this->frontendUserRepository->findByName($receiver);
                 if (count($tmp) == 1 && in_array($tmp[0]->getUid(), $allowedReceiverUids)) {
                     $tmp = $tmp[0];
@@ -177,7 +184,24 @@ class MessageFormController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
                 }
             }
         }
-
+        
+        // Removes the excluded recipients
+        /** @var array $tmp  */
+        foreach ($receiversSource as $receiver) {
+            $receiver = trim($receiver);
+            if (substr($receiver, 0, 1) === MessageFormController::EXCLUDE_MARKER) {
+                $tmp = $this->frontendUserRepository->findByName($receiver);
+                if (count($tmp) == 1 && in_array($tmp[0]->getUid(), $allowedReceiverUids)) {
+                    $tmp = $tmp[0];
+                    unset($receivers[$tmp->getUid()]);
+                } else {
+                    if (! empty(trim($receiver))) {
+                        $wrongReceivers[] = $receiver;
+                    }
+                }
+            }
+        }
+        
         /** @var ValidationResults $validationResults */
         $validationResults = $this->validate($message, $wrongReceivers, $wrongReceiverGroups, $wrongAttachments);
         if (! $validationResults->hasErrors()) {
@@ -251,7 +275,7 @@ class MessageFormController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
             $subject = html_entity_decode($this->settings['subjectPrefix']) . $message->getSubject();
 
             $replyTo = [];
-            if($message->getSendSenderAddress()) {
+            if ($message->getSendSenderAddress()) {
                 if (! empty($currentFrontendUser->getEmail())) {
                     $replyTo[$currentFrontendUser->getEmail()] = $currentFrontendUser->getName();
                 }
@@ -259,7 +283,6 @@ class MessageFormController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionCont
                 if (! empty($this->settings['noReplySenderEmail'])) {
                     $replyTo[$this->settings['noReplySenderEmail']] = LocalizationUtility::translate('message.sender.noReply', 'SendMessage');
                 }
-                
             }
 
             $successful = count($receivers) > 0;
